@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1621570390 source:e:\codeworkshop\codeblock\projectdsalg\binarytree\main.cpp
+	<iostream>
+	<queue>
+
