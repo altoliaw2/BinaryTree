@@ -62,8 +62,7 @@ class Tree{
         }
     }
 
-
-    void fn_TraInOrder(Node<CL1>* op_Tmp, bool b_Mode = false){
+    public: void fn_TraInOrder(Node<CL1>* op_Tmp, bool b_Mode = false){
         if (op_Tmp == nullptr)
             return;
 
@@ -77,6 +76,59 @@ class Tree{
             delete op_Tmp;
         }
         fn_TraInOrder(op_TmpRt, b_Mode);
+    }
+
+    public: void fn_SeaNode(Node<CL1>* op_Tmp, Node<CL1>* op_TmpP, CL1& cl1_Val,
+                            Node<CL1>* op_SerN, Node<CL1>* op_SerNP, Node<CL1>* op_Last, Node<CL1>* op_LastP){
+        if (op_Tmp == nullptr)
+            return;
+
+        fn_SeaNode(op_Tmp->op_Lt, op_Tmp,  cl1_Val, op_SerN, op_SerNP, op_Last, op_LastP);
+        if(op_Tmp->cl1_Field == cl1_Val){
+            op_SerNP = op_TmpP;
+            op_SerN = op_Tmp;
+        }
+        op_Last = op_Tmp;
+        op_LastP = op_Tmp;
+        fn_SeaNode(op_Tmp->op_Rt, op_Tmp,  cl1_Val, op_SerN, op_SerNP, op_Last, op_LastP);
+    }
+
+    public: void fn_DelNode(Node<CL1>* op_Tmp, CL1& cl1_Val){
+        Node<CL1>* op_SerN = nullptr;
+        Node<CL1>* op_SerNP = nullptr;
+        Node<CL1>* op_Last = nullptr;
+        Node<CL1>* op_LastP = nullptr;
+        fn_SeaNode(op_Tmp->op_Rt, op_Tmp, cl1_Val, op_SerN, op_SerNP, op_Last, op_LastP);
+
+        if(op_SerN == nullptr){
+            return ;
+        }
+
+        if(op_SerN->op_Lt ==nullptr && op_SerN->op_Rt ==nullptr){
+            if(op_SerNP != nullptr){
+                if(op_SerNP->op_Lt == op_SerN){
+                    op_SerNP->op_Lt =nullptr;
+                }
+                else if(op_SerNP->op_Rt == op_SerN){
+                    op_SerNP->op_Rt =nullptr;
+                }
+            }
+            delete op_SerN;
+        }
+        else{
+            CL1 cl1_Tmp = op_SerN->cl1_Field;
+            op_SerN->cl1_Field = op_Last-> cl1_Field;
+            op_Last-> cl1_Field = cl1_Tmp;
+            if(op_LastP != nullptr){
+                if(op_LastP->op_Lt == op_Last){
+                    op_LastP->op_Lt =nullptr;
+                }
+                else if(op_LastP->op_Rt == op_Last){
+                    op_LastP->op_Rt = nullptr;
+                }
+            }
+            delete op_Last;
+        }
     }
 };
 
